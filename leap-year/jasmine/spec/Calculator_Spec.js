@@ -11,7 +11,3 @@ describe("Calculator", function() {
   });
 
 });
-
-var getCalculation = function(val) {
-    return val || 0;
-};
