@@ -17,15 +17,13 @@ function RomanConverter(value) {
     
     } 
 
-    /*
-    console.log(map);
+    console.log('Map', map);
     for(var key in map) {
         console.log('Key', key, 'String', map[key] );
         if(value > key) {
             return map[key] + RomanConverter(value - key);
         }
     };
-    */
     
     if(value > 50) {
         return map[50] + RomanConverter(value - 50);
