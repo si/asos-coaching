@@ -1,3 +1,32 @@
+var Row = function(row) {
+  this.row = row;
+};
+
+Row.TOP = 0;
+Row.MIDDLE = 1;
+Row.BOTTOM = 2;
+
+var Column = function(column) {
+  this.column = column;
+};
+
+Column.LEFT = 0;
+Column.CENTER = 1;
+Column.RIGHT = 2;
+
+function Grid() {
+  this._grid = [[],[],[],];
+}
+
+Grid.prototype.writeMark = function(column, row) {
+  if (!(column instanceof Column)) {
+    throw 'no column';
+  }  
+  if (!(row instanceof Row)) {
+    throw 'no row';
+  }  
+}
+
 function TicTacToe() {
   this.grid = [[],[],[]];
   this.winner = null;

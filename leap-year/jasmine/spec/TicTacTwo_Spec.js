@@ -1,3 +1,21 @@
+describe('Grid', function() {
+ 
+  it('should throw exception for writing non-column', function() {   
+    var grid = new Grid();
+    var invalidColumn = 1;
+    var row = new Row(Row.TOP);
+    expect(grid.writeMark.bind(grid, invalidColumn, row)).toThrow('no column');
+  });
+
+  it('should throw exception for writing non-row', function() {   
+    var grid = new Grid();
+    var invalidRow = 1;
+    var column = new Column(Column.LEFT);
+    expect(grid.writeMark.bind(grid, column, invalidRow)).toThrow('no row');
+  });
+
+});
+
 describe('TicTacToe', function() {
  
   it('X always goes first', function() {   
