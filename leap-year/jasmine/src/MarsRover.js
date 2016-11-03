@@ -1,16 +1,59 @@
-function Rover() {
-  
+function DataMapper() {
+
 };
 
-Rover.prototype.ORIENTATIONS = [ "N", "E", "S", "W" ];
+DataMapper.prototype.getInstructions = function(dataString) {
+  return dataString
+    .split("\n")[2]
+    .split("");
+}
 
-Rover.prototype.ROTATION = {
+DataMapper.prototype.getOrientation = function(dataString) {
+  return dataString
+    .split("\n")[1]
+    .split(" ")[2];
+}
+
+DataMapper.prototype.getPosition = function(dataString) {
+  return dataString
+    .split("\n")[1]
+    .split(" ")
+    .slice(0, 2).map(function(item) {
+      return parseInt(item, 10);
+    }); 
+}
+
+
+function Compass() {
+
+};
+
+Compass.prototype.ORIENTATION = {
+  North: "N",
+  West: "W",
+  East: "E",
+  South: "S"
+};
+
+Compass.prototype.ORIENTATIONS = [ 
+  Compass.prototype.ORIENTATION.North,
+  Compass.prototype.ORIENTATION.East,
+  Compass.prototype.ORIENTATION.South,
+  Compass.prototype.ORIENTATION.West ];
+
+Compass.prototype.ROTATION = {
   "L": -1,
   "R": 1
 };
 
-Rover.prototype.getNewOrientation = function(orientation, rotation) {
+
+Compass.prototype.getNewOrientation = function(orientation, rotation) {
   rotation = this.ROTATION[rotation];
+
+  if (!rotation) {
+    return orientation;
+  }
+
   var currentOrientationIndex = this.ORIENTATIONS.indexOf(orientation);
   var newOrientationIndex = currentOrientationIndex + rotation;
   
@@ -24,38 +67,57 @@ Rover.prototype.getNewOrientation = function(orientation, rotation) {
   return this.ORIENTATIONS[newOrientationIndex];
 };
 
-Rover.prototype.init = function(dataString) {
-  var instructions = this.getInstructionsFromDataString(dataString);
-  var orientation = this.getOrientationFromDataString(dataString);
+function Navigator() {
 
-  instructions.forEach(function(instruction) {
-    if (Object.keys(this.ROTATION).indexOf(instruction) !== -1) {
-      orientation = this.getNewOrientation(orientation, instruction);
-    }    
-  }.bind(this));
-  return "  " + orientation;
 }
 
-Rover.prototype.getInstructionsFromDataString = function(dataString) {
-  return dataString
-    .split("\n")[2]
-    .split("");
-}
+Navigator.prototype.instructionToPosition = (function() {
+  var ORIENTATION = Compass.prototype.ORIENTATION;
+  var dictionary = {};
 
-Rover.prototype.getOrientationFromDataString = function(dataString) {
-  return dataString
-    .split("\n")[1]
-    .split(" ")[2];
-}
-/*
-Rover.prototype.parseDataString = function(dataString) {
-  var lines = dataString.split("\n");
-  var plateauSize = lines[0]
-    .split(" ")
-    .map(function(item) { return parseInt(item, 10); });
-  
-  return {
-    plateauSize: plateauSize
+  dictionary[ORIENTATION.North] = function(position) { 
+    position[1] += 1; 
+    return position;
+  };
+  dictionary[ORIENTATION.South] = function(position) {
+     position[1] -= 1;
+     return position;
+  };
+  dictionary[ORIENTATION.East] = function(position) { 
+    position[0] += 1; 
+    return position;
+  };
+  dictionary[ORIENTATION.West] = function(position) { 
+    position[0] -= 1; 
+    return position;
   };
   
-};*/
+  return dictionary;
+})();
+
+Navigator.prototype.move = function(position, orientation) {
+  return this.instructionToPosition[orientation]([].concat(position));
+}
+
+
+function Rover(dataMapper, compass, navigator) {
+  this.dataMapper = dataMapper;
+  this.compass = compass;
+  this.navigator = navigator;
+};
+
+Rover.prototype.move = function(dataString) {
+  var instructions = this.dataMapper.getInstructions(dataString);
+  var orientation = this.dataMapper.getOrientation(dataString);
+  var position = this.dataMapper.getPosition(dataString);
+
+  instructions.forEach(function(instruction) {   
+      if(instruction === "M") {
+        position = this.navigator.move(position, orientation);
+        return;
+      }
+      orientation = this.compass.getNewOrientation(orientation, instruction);
+  }.bind(this));
+
+  return position.join(" ") + " " + orientation;
+}
