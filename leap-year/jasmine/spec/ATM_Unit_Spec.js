@@ -44,15 +44,28 @@ describe('[UNIT] ATM', function() {
 });
 
 describe('[UNIT] Transaction History', function() {
-  it('should register deposit of 1000', function() {
-    var transactionHistory = new TransactionHistory();
-    transactionHistory.addTransaction(1000, 'Deposit', new Date(2012, 01, 10));
-    var transactions = transactionHistory.getTransactions();
-    expect(transactions.length).toBe(1);
-    expect(transactions[0].amount).toBe(1000);
-    expect(transactions[0].type).toBe('Deposit');
-    expect(transactions[0].date.getFullYear()).toBe(2016);
-    expect(transactions[0].date.getMonth()).toBe(1);
-    expect(transactions[0].date.getDate()).toBe(10);
+  var scenarios = [
+    { 
+      amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10
+    }
+  ]
+  scenarios.forEach(function(scenario) {
+    it('should register deposit of ' + scenario.amount, function() {
+      var transactionHistory = new TransactionHistory();
+      transactionHistory.addTransaction(
+        scenario.amount, 
+        scenario.type, 
+        new Date(scenario.year, scenario.month, scenario.date)
+      );
+      var transactions = transactionHistory.getTransactions();
+      expect(transactions.length).toBe(1);
+      expect(transactions[0].amount).toBe(scenario.amount);
+      expect(transactions[0].type).toBe(scenario.type);
+      expect(transactions[0].date.getFullYear()).toBe(scenario.year);
+      expect(transactions[0].date.getMonth()).toBe(scenario.month);
+      expect(transactions[0].date.getDate()).toBe(scenario.date);
+    })
   })
+  
+
 });
