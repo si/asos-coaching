@@ -47,16 +47,19 @@ describe('[UNIT] Transaction History', function() {
   var scenarios = [
     { 
       amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10
+    }, 
+    { 
+      amount: 2000, type: 'Withdrawal', year: 2013, month: 01, date: 11
     }
   ]
   scenarios.forEach(function(scenario) {
-    it('should register deposit of ' + scenario.amount, function() {
+    it('should register ' + scenario.type +  ' of ' + scenario.amount, function() {
       var transactionHistory = new TransactionHistory();
-      transactionHistory.addTransaction(
-        scenario.amount, 
-        scenario.type, 
-        new Date(scenario.year, scenario.month, scenario.date)
-      );
+      transactionHistory.addTransaction({ 
+        amount: scenario.amount, 
+        type: scenario.type, 
+        date: new Date(scenario.year, scenario.month, scenario.date)
+      });
       var transactions = transactionHistory.getTransactions();
       expect(transactions.length).toBe(1);
       expect(transactions[0].amount).toBe(scenario.amount);

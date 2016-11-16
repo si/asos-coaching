@@ -20,19 +20,13 @@ Statement.prototype.getStatement = function() {
 };
 
 function TransactionHistory() {
-
+  this.transactions = [];
 };
 
-TransactionHistory.prototype.addTransaction = function() {
-  
+TransactionHistory.prototype.addTransaction = function(transaction) {
+  this.transactions.push(transaction);
 };
 
 TransactionHistory.prototype.getTransactions = function() {
-  return [
-    {
-      amount: 1000,
-      type: 'Deposit',
-      date: new Date(2016,1,10)
-    }
-  ]
+  return this.transactions;
 };
