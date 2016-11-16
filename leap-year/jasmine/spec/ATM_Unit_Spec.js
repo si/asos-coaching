@@ -7,7 +7,7 @@ describe('[UNIT] ATM', function() {
 
   beforeEach(function() {
     transactionHistory = {
-      addTransaction: function(amount, type) {},
+      addTransaction: function(transaction) {},
       getTransactions: function() {}
     };
     statement = {
@@ -19,7 +19,7 @@ describe('[UNIT] ATM', function() {
 
     clock = {
       getDate: function() {
-        return stubDate.getFullYear() + '-' + stubDate.getMonth() + stubDate.getDay();  
+        return stubDate;  
       }
     }
 
@@ -29,11 +29,18 @@ describe('[UNIT] ATM', function() {
   });
 
   it('should make deposit with 1000', function() {
-    var atm = new ATM(statement, transactionHistory);
+    var atm = new ATM(statement, transactionHistory, clock);
+    stubDate = new Date(2012, 01, 10);
     atm.makeDeposit(1000);
-    expect(transactionHistory.addTransaction).toHaveBeenCalledWith(1000, 'Deposit');
+    expect(transactionHistory.addTransaction).toHaveBeenCalledWith({ amount: 1000, type: 'Deposit', date: clock.getDate()});
   });
-
+/*
+  it('should make withdrawal with 1000', function() {
+    var atm = new ATM(statement, transactionHistory);
+    atm.makeWithdrawal(1000);
+    expect(transactionHistory.addTransaction).toHaveBeenCalledWith({}});
+  });
+*/
   it('should print statements', function() {
     var atm = new ATM(statement, transactionHistory);
     atm.printStatement(printer);

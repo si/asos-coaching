@@ -1,10 +1,11 @@
-function ATM(statement, transactionHistory) {
+function ATM(statement, transactionHistory, clock) {
   this.statement = statement;
   this.transactionHistory = transactionHistory;
+  this.clock = clock;
 }
 
 ATM.prototype.makeDeposit = function(amount) {
-  this.transactionHistory.addTransaction(amount, 'Deposit');
+  this.transactionHistory.addTransaction({ amount: amount, type: 'Deposit', date: this.clock.getDate() } );
 };
 
 ATM.prototype.printStatement = function(printer) {
