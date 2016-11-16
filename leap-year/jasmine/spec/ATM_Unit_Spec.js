@@ -51,8 +51,8 @@ describe('[UNIT] Transaction History', function() {
     expect(transactions.length).toBe(1);
     expect(transactions[0].amount).toBe(1000);
     expect(transactions[0].type).toBe('Deposit');
-    expect(transactions[0].date.getFullYear()).toBe('2016');
-    expect(transactions[0].date.getMonth()).toBe('ß01');
-    expect(transactions[0].date.getDay()).toBe('10');ß
+    expect(transactions[0].date.getFullYear()).toBe(2016);
+    expect(transactions[0].date.getMonth()).toBe(1);
+    expect(transactions[0].date.getDate()).toBe(10);
   })
 });

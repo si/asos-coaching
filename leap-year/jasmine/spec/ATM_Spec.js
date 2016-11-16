@@ -10,7 +10,7 @@ date || credit || debit || balance
 10/01/2012 || 1000.00 || || 1000.00
 */
 
-describe("[ACC] Allows to make a deposit", function() {
+xdescribe("[ACC] Allows to make a deposit", function() {
   describe('given a deposit of 1000', function() {
       it("it prints a statement with ", function() {
         var expectedStatement = "date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00";

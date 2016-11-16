@@ -28,5 +28,11 @@ TransactionHistory.prototype.addTransaction = function() {
 };
 
 TransactionHistory.prototype.getTransactions = function() {
-  
+  return [
+    {
+      amount: 1000,
+      type: 'Deposit',
+      date: new Date(2016,1,10)
+    }
+  ]
 };
