@@ -55,9 +55,10 @@ describe('[UNIT] ATM', function() {
 });
 
 /*
+TODO
 describe('Statement', function() {
-  it('should order transactions in reverse date', function() {
-
+  it('should format transaction header', function() {
+      var statement = new Statement(formatter)
   });
 });
 */
