@@ -26,6 +26,8 @@ describe('[UNIT] ATM', function() {
     printer = {
       print: function() {}
     };
+
+    spyOn(printer, 'print')
   });
 
   it('should make deposit with 1000', function() {
@@ -48,8 +50,17 @@ describe('[UNIT] ATM', function() {
 
     expect(transactionHistory.getTransactions).toHaveBeenCalled();
     expect(statement.getStatement).toHaveBeenCalled();
+    expect(printer.print).toHaveBeenCalled();
   });
 });
+
+/*
+describe('Statement', function() {
+  it('should order transactions in reverse date', function() {
+
+  });
+});
+*/
 
 describe('[UNIT] Transaction History', function() {
   var scenarios = [
