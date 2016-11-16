@@ -8,6 +8,10 @@ ATM.prototype.makeDeposit = function(amount) {
   this.transactionHistory.addTransaction({ amount: amount, type: 'Deposit', date: this.clock.getDate() } );
 };
 
+ATM.prototype.makeWithdrawal = function(amount) {
+  this.transactionHistory.addTransaction({ amount: amount, type: 'Withdrawal', date: this.clock.getDate() } );
+};
+
 ATM.prototype.printStatement = function(printer) {
   printer.print(this.statement.getStatement(this.transactionHistory.getTransactions()));
 };

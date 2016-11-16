@@ -34,13 +34,14 @@ describe('[UNIT] ATM', function() {
     atm.makeDeposit(1000);
     expect(transactionHistory.addTransaction).toHaveBeenCalledWith({ amount: 1000, type: 'Deposit', date: clock.getDate()});
   });
-/*
-  it('should make withdrawal with 1000', function() {
-    var atm = new ATM(statement, transactionHistory);
-    atm.makeWithdrawal(1000);
-    expect(transactionHistory.addTransaction).toHaveBeenCalledWith({}});
+
+  it('should make withdrawal with 500', function() {
+    var atm = new ATM(statement, transactionHistory, clock);
+    stubDate = new Date(2012, 02, 13);
+    atm.makeWithdrawal(500);
+    expect(transactionHistory.addTransaction).toHaveBeenCalledWith({ amount: 500, type: 'Withdrawal', date: clock.getDate()});
   });
-*/
+
   it('should print statements', function() {
     var atm = new ATM(statement, transactionHistory);
     atm.printStatement(printer);
