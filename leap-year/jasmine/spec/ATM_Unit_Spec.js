@@ -114,6 +114,9 @@ describe('[UNIT] Balance Calculator', function() {
     it('should return transaction history with balances for scenario ' + (index+1), function() {
 
       //expect(transactions[0].date.getDate()).toBe(scenario.date);
+      var balanceCalculator = new BalanceCalculator();
+      var output = balanceCalculator.getBalances(scenario);
+      expect(output).toEqual([ { transaction: scenario[0], balance: scenario[0].amount }]);
     })
   })
 });

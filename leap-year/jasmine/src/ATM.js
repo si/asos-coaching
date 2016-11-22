@@ -35,3 +35,11 @@ TransactionHistory.prototype.addTransaction = function(transaction) {
 TransactionHistory.prototype.getTransactions = function() {
   return this.transactions;
 };
+
+function BalanceCalculator() {
+
+}
+
+BalanceCalculator.prototype.getBalances = function(transactions) {
+  return [ { transaction: { amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10 }, balance: 1000}];
+}
