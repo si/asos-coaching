@@ -1,3 +1,8 @@
+function TransactionHistoryMock(transactions) {
+  this.addTransaction = jasmine.createSpy();
+  this.getTransactions = jasmine.createSpy().and.returnValue(transactions);
+};
+
 describe('[UNIT] ATM', function() {
   var transactionHistory;
   var statement;
@@ -6,15 +11,10 @@ describe('[UNIT] ATM', function() {
   var stubDate;
 
   beforeEach(function() {
-    transactionHistory = {
-      addTransaction: function(transaction) {},
-      getTransactions: function() {}
-    };
+    transactionHistory = new TransactionHistoryMock();
     statement = {
       getStatement: function() {}
     };
-    spyOn(transactionHistory, 'addTransaction');
-    spyOn(transactionHistory, 'getTransactions');
     spyOn(statement, 'getStatement');
 
     clock = {
@@ -48,20 +48,30 @@ describe('[UNIT] ATM', function() {
     var atm = new ATM(statement, transactionHistory);
     atm.printStatement(printer);
 
+    //  TODO: Don't expect queries, allow them. Expect commands
     expect(transactionHistory.getTransactions).toHaveBeenCalled();
     expect(statement.getStatement).toHaveBeenCalled();
     expect(printer.print).toHaveBeenCalled();
   });
 });
 
-/*
-TODO
-describe('Statement', function() {
-  it('should format transaction header', function() {
-      var statement = new Statement(formatter)
+xdescribe('[UNIT] Statement', function() {
+  var transactionHistory;
+  var statement;
+  beforeEach(function() {
+    transactionHistory = new TransactionHistoryMock([]);
+    
+    balanceCalculator = {
+      getBalances: function() {}
+    };
+
+    var statement = new Statement(transactionHistory, balanceCalculator);
+  });  
+  it('should return formatted statement', function() {
+      var output = statement.getStatement(formatter);
+      expect(output).toEqual("date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00");
   });
 });
-*/
 
 describe('[UNIT] Transaction History', function() {
   var scenarios = [
@@ -89,6 +99,21 @@ describe('[UNIT] Transaction History', function() {
       expect(transactions[0].date.getDate()).toBe(scenario.date);
     })
   })
-  
+});
 
+describe('[UNIT] Balance Calculator', function() {
+  var scenarios = [
+    [
+      { 
+        amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10
+      }
+    ]
+  ];
+
+  scenarios.forEach(function(scenario, index) {
+    it('should return transaction history with balances for scenario ' + (index+1), function() {
+
+      //expect(transactions[0].date.getDate()).toBe(scenario.date);
+    })
+  })
 });
