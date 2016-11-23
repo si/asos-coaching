@@ -21,10 +21,12 @@ function Statement(transactionHistory, balanceCalculator) {
   this.balanceCalculator = balanceCalculator;
 };
 
-Statement.prototype.getStatement = function() {
-  this.balanceCalculator.getBalances(this.transactionHistory.getTransactions().sort(function(a, b) {
+Statement.prototype.getStatement = function(formatter) {
+  var balance = this.balanceCalculator.getBalances(this.transactionHistory.getTransactions().sort(function(a, b) {
       return a.date.getTime() - b.date.getTime();
   }));
+  balance.reverse();
+  formatter.format(balance);
 };
 
 function TransactionHistory() {

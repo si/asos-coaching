@@ -64,18 +64,17 @@ describe('[UNIT] Statement', function() {
     { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14)},
     { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11)}
   ];
+  var balanceData = [ 
+    { transaction: { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10) }, balance: 1000},
+    { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000},
+    { transaction: { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14) }, balance: 4500}
+  ];
 
   beforeEach(function() {
-    transactionHistory = new TransactionHistoryMock(transactionHistoryStubData);
+    transactionHistory = new TransactionHistoryMock([].concat(transactionHistoryStubData));
     
     balanceCalculator = {
-      getBalances: jasmine.createSpy().and.returnValue(
-        [ 
-          { transaction: { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10) }, balance: 1000},
-          { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000},
-          { transaction: { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14) }, balance: 4500}
-        ]
-      )
+      getBalances: jasmine.createSpy().and.returnValue([].concat(balanceData))
     };
 
     printer = {
@@ -98,7 +97,12 @@ describe('[UNIT] Statement', function() {
     expect(balanceCalculator.getBalances).toHaveBeenCalledWith(dataOrderedByDateAsc);
   });
 
-
+  it('should call formatter with balance data', function(){
+    statement.getStatement(formatter);
+    var dataOrderedByDateDesc = [].concat(balanceData);
+    dataOrderedByDateDesc.reverse();
+    expect(formatter.format).toHaveBeenCalledWith(dataOrderedByDateDesc);
+  });
 
   /*
   it('should return formatted statement', function() {
