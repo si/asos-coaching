@@ -22,7 +22,9 @@ function Statement(transactionHistory, balanceCalculator) {
 };
 
 Statement.prototype.getStatement = function() {
-  this.balanceCalculator.getBalances(this.transactionHistory.getTransactions());
+  this.balanceCalculator.getBalances(this.transactionHistory.getTransactions().sort(function(a, b) {
+      return a.date.getTime() - b.date.getTime();
+  }));
 };
 
 function TransactionHistory() {

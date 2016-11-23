@@ -61,6 +61,7 @@ describe('[UNIT] Statement', function() {
   var printer;
   var transactionHistoryStubData = [
     { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10)},
+    { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14)},
     { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11)}
   ];
 
@@ -71,7 +72,8 @@ describe('[UNIT] Statement', function() {
       getBalances: jasmine.createSpy().and.returnValue(
         [ 
           { transaction: { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10) }, balance: 1000},
-          { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000}
+          { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000},
+          { transaction: { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14) }, balance: 4500}
         ]
       )
     };
@@ -89,8 +91,14 @@ describe('[UNIT] Statement', function() {
 
   it('should call BalanceCalculator with transaction history data', function(){
     statement.getStatement(formatter);
-    expect(balanceCalculator.getBalances).toHaveBeenCalledWith(transactionHistoryStubData)
+    var dataOrderedByDateAsc = [].concat(transactionHistoryStubData);
+    dataOrderedByDateAsc.sort(function(a, b) {
+      return a.date.getTime() - b.date.getTime();
+    });
+    expect(balanceCalculator.getBalances).toHaveBeenCalledWith(dataOrderedByDateAsc);
   });
+
+
 
   /*
   it('should return formatted statement', function() {
