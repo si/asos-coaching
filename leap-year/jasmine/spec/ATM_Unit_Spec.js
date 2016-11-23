@@ -69,7 +69,7 @@ describe('[UNIT] Statement', function() {
     { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000},
     { transaction: { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14) }, balance: 4500}
   ];
-
+  var formatterData = "date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00";
   beforeEach(function() {
     transactionHistory = new TransactionHistoryMock([].concat(transactionHistoryStubData));
     
@@ -77,12 +77,8 @@ describe('[UNIT] Statement', function() {
       getBalances: jasmine.createSpy().and.returnValue([].concat(balanceData))
     };
 
-    printer = {
-      print: jasmine.createSpy()
-    };
-
     formatter = {
-      format: jasmine.createSpy()
+      format: jasmine.createSpy().and.returnValue(formatterData)
     };
 
     statement = new Statement(transactionHistory, balanceCalculator);
@@ -104,12 +100,10 @@ describe('[UNIT] Statement', function() {
     expect(formatter.format).toHaveBeenCalledWith(dataOrderedByDateDesc);
   });
 
-  /*
   it('should return formatted statement', function() {
       var output = statement.getStatement(formatter);
-      expect(output).toEqual("date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00");
+      expect(output).toEqual(formatterData);
   });
-  */
 });
 
 describe('[UNIT] Transaction History', function() {

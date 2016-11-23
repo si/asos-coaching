@@ -26,7 +26,7 @@ Statement.prototype.getStatement = function(formatter) {
       return a.date.getTime() - b.date.getTime();
   }));
   balance.reverse();
-  formatter.format(balance);
+  return formatter.format(balance);
 };
 
 function TransactionHistory() {
