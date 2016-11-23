@@ -55,22 +55,49 @@ describe('[UNIT] ATM', function() {
   });
 });
 
-xdescribe('[UNIT] Statement', function() {
+describe('[UNIT] Statement', function() {
   var transactionHistory;
   var statement;
+  var printer;
+  var transactionHistoryStubData = [
+    { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10)},
+    { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11)}
+  ];
+
   beforeEach(function() {
-    transactionHistory = new TransactionHistoryMock([]);
+    transactionHistory = new TransactionHistoryMock(transactionHistoryStubData);
     
     balanceCalculator = {
-      getBalances: function() {}
+      getBalances: jasmine.createSpy().and.returnValue(
+        [ 
+          { transaction: { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10) }, balance: 1000},
+          { transaction: { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11) }, balance: 3000}
+        ]
+      )
     };
 
-    var statement = new Statement(transactionHistory, balanceCalculator);
+    printer = {
+      print: jasmine.createSpy()
+    };
+
+    formatter = {
+      format: jasmine.createSpy()
+    };
+
+    statement = new Statement(transactionHistory, balanceCalculator);
   });  
+
+  it('should call BalanceCalculator with transaction history data', function(){
+    statement.getStatement(formatter);
+    expect(balanceCalculator.getBalances).toHaveBeenCalledWith(transactionHistoryStubData)
+  });
+
+  /*
   it('should return formatted statement', function() {
       var output = statement.getStatement(formatter);
       expect(output).toEqual("date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00");
   });
+  */
 });
 
 describe('[UNIT] Transaction History', function() {

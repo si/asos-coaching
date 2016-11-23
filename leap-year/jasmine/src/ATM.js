@@ -16,12 +16,13 @@ ATM.prototype.printStatement = function(printer) {
   printer.print(this.statement.getStatement(this.transactionHistory.getTransactions()));
 };
 
-function Statement() {
-
+function Statement(transactionHistory, balanceCalculator) {
+  this.transactionHistory = transactionHistory;
+  this.balanceCalculator = balanceCalculator;
 };
 
 Statement.prototype.getStatement = function() {
-
+  this.balanceCalculator.getBalances(this.transactionHistory.getTransactions());
 };
 
 function TransactionHistory() {
