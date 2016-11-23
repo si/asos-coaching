@@ -70,6 +70,7 @@ describe('[UNIT] Statement', function() {
     { transaction: { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14) }, balance: 4500}
   ];
   var formatterData = "date || credit || debit || balance<br>10/01/2012 || 1000.00 || || 1000.00";
+
   beforeEach(function() {
     transactionHistory = new TransactionHistoryMock([].concat(transactionHistoryStubData));
     
@@ -135,21 +136,22 @@ describe('[UNIT] Transaction History', function() {
 });
 
 describe('[UNIT] Balance Calculator', function() {
-  var scenarios = [
-    [
-      { 
-        amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10
-      }
-    ]
+  var transactionHistoryOrdered = [
+      { amount: 1000, type: 'Deposit', date: new Date(2012, 1, 10)},
+      { amount: 2000, type: 'Deposit', date: new Date(2012, 1, 11)},
+      { amount: 1500, type: 'Deposit', date: new Date(2012, 1, 14)}
+    ];
+  var balanceData = [ 
+    { transaction: transactionHistoryOrdered[0], balance: 1000},
+    { transaction: transactionHistoryOrdered[1], balance: 3000},
+    { transaction: transactionHistoryOrdered[2], balance: 4500}
   ];
 
-  scenarios.forEach(function(scenario, index) {
-    it('should return transaction history with balances for scenario ' + (index+1), function() {
+    it('should return transaction history with balances', function() {
 
       //expect(transactions[0].date.getDate()).toBe(scenario.date);
       var balanceCalculator = new BalanceCalculator();
-      var output = balanceCalculator.getBalances(scenario);
-      expect(output).toEqual([ { transaction: scenario[0], balance: scenario[0].amount }]);
-    })
-  })
+      var output = balanceCalculator.getBalances(transactionHistoryOrdered);
+      expect(output).toEqual(balanceData);
+    });
 });

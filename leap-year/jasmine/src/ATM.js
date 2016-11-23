@@ -46,5 +46,14 @@ function BalanceCalculator() {
 }
 
 BalanceCalculator.prototype.getBalances = function(transactions) {
-  return [ { transaction: { amount: 1000, type: 'Deposit', year: 2016, month: 01, date: 10 }, balance: 1000}];
+  var balance = 0;
+  var output = [];
+  transactions.forEach(function(transaction) {
+    balance += transaction.amount;
+    output.push({
+      transaction: transaction, balance: balance
+    });
+  });
+
+  return output;
 }
